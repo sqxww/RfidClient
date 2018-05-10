@@ -1,11 +1,12 @@
 package com.rfid.client.pojo.cprg;
 
 public class CMessage {
-	private Integer crcCode;
+	private Integer crcCode = 0xe3a90101;
 	private Integer messageLength;
 	private Long sessionId;
 	private Byte type;
 	private Byte bodyType;
+	private Integer urlLength;
 	private String url;
 	private Object body;
 	private Byte status;
@@ -56,5 +57,11 @@ public class CMessage {
 	}
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+	public Integer getUrlLength() {
+		return urlLength;
+	}
+	public void setUrlLength(Integer urlLength) {
+		this.urlLength = urlLength;
 	}
 }

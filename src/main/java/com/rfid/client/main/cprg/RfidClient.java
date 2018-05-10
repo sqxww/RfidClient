@@ -2,11 +2,11 @@ package com.rfid.client.main.cprg;
 
 import java.util.concurrent.TimeUnit;
 
-import com.rfid.client.codec.NettyMessageDecoder;
-import com.rfid.client.codec.NettyMessageEncoder;
-import com.rfid.client.handler.HeartBeatReqHandler;
-import com.rfid.client.handler.LoginAuthReqHandler;
-import com.rfid.client.handler.ReqHandler;
+import com.rfid.client.codec.CMessageDecoder;
+import com.rfid.client.codec.CMessageEncoder;
+import com.rfid.client.handler.cprg.CHeartBeatReqHandler;
+import com.rfid.client.handler.cprg.CLoginAuthReqHandler;
+import com.rfid.client.handler.cprg.CReqHandler;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -32,12 +32,12 @@ public class RfidClient {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
-					p.addLast(new NettyMessageDecoder(1024 * 1024, 4, 4, -8));
-					p.addLast(new NettyMessageEncoder());
+					p.addLast(new CMessageDecoder(1024 * 1024, 4, 4, -8));
+					p.addLast(new CMessageEncoder());
 					p.addLast(new ReadTimeoutHandler(50,TimeUnit.SECONDS));
-					p.addLast(new LoginAuthReqHandler());
-					p.addLast(new HeartBeatReqHandler());
-					p.addLast(new ReqHandler());
+					p.addLast(new CLoginAuthReqHandler());
+					p.addLast(new CHeartBeatReqHandler());
+					p.addLast(new CReqHandler());
 					
 				}
 				

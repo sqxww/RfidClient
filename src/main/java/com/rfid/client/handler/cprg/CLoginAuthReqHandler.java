@@ -7,8 +7,8 @@ import com.rfid.client.pojo.StatuType;
 import com.rfid.client.pojo.cprg.CMessage;
 import com.rfid.client.util.ErrorRespQueue;
 import com.rfid.client.util.ReqExecutor;
-import com.rfid.client.util.ReqMessageQueue;
-import com.rfid.client.util.RespMessageQueueUtil;
+import com.rfid.client.util.cprg.ReqMessageQueue;
+import com.rfid.client.util.cprg.RespMessageQueueUtil;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -23,7 +23,7 @@ public class CLoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 		CMessage message = (CMessage) msg;
 		//如果是握手应答消息，需要判断是否认证成功
 		if(message != null && message.getType() == MessageType.LOGIN_RESP.value()){
-//			RespMessageQueueUtil.getRespMsgQueue().add(message);
+			RespMessageQueueUtil.getRespMsgQueue().add(message);
 			//握手失败
 			if(message.getStatus() != StatuType.SUB_OK.value()){
 				//获取握手失败状态，进行相对应的处理
@@ -43,7 +43,7 @@ public class CLoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	private CMessage buildLoginReq() throws InterruptedException{
-		CMessage message = null;//ReqMessageQueue.getInstance().remove();
+		CMessage message = ReqMessageQueue.getInstance().remove();
 		return message;
 	}
 
@@ -64,9 +64,9 @@ public class CLoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 
 			while(!Thread.currentThread().isInterrupted()){
 				try {
-					CMessage reqMsg = null;//reqMsgQueue.remove();
+					CMessage reqMsg = reqMsgQueue.remove();
 					ctx.writeAndFlush(reqMsg);
-				} catch (/*Interrupted*/Exception e) {
+				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
 			}

@@ -19,7 +19,8 @@ public class CMessageEncoder extends MessageToByteEncoder<CMessage> {
 		out.writeLong(msg.getSessionId());
 		out.writeByte(msg.getType());
 		out.writeByte(msg.getBodyType());
-		out.writeZero(13);
+		out.writeInt(msg.getUrlLength());
+		out.writeZero(10);
 		
 		//写消息体信息
 		if(msg.getBody() != null){
@@ -34,10 +35,12 @@ public class CMessageEncoder extends MessageToByteEncoder<CMessage> {
 				out.writeInt(body.length);
 				out.writeBytes(body);
 			}
-		}else
-			out.writeInt(0);
+		}/*else
+			out.writeInt(0);*/
 		//重新给消息长度赋值
 		out.setInt(4, out.readableBytes());
+		
+		System.out.println(out.readableBytes());
 		
 	}
 
